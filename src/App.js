@@ -66,11 +66,14 @@ function Group() {
                 console.log("Released the " + stacks[stack.id].balls[0] + " ball back down.");
                 setPicked(-1);
             } else {
-                let tempArray = [...stacks];
-                console.log("were gonna drop a " + stacks[picked].balls[0] + " into stack" + stack.id);
-                tempArray[stack.id].balls.unshift(tempArray[picked].balls.shift())
-                setPicked(-1);
-                setStacks(tempArray);
+                console.log("The color on the top of the stack youre adding to is: " + stacks[stack.id].balls[stacks[stack.id].balls.length - 1])
+                if (stacks[stack.id].balls.length < 4) {
+                    let tempArray = [...stacks];
+                    console.log("were gonna drop a " + stacks[picked].balls[0] + " into stack" + stack.id);
+                    tempArray[stack.id].balls.unshift(tempArray[picked].balls.shift())
+                    setPicked(-1);
+                    setStacks(tempArray);
+                }
             }
         }
         else {
@@ -113,25 +116,25 @@ function Stack({ stack, setStacks, picked, pick }) {
 
     return (
         <div className='stackContainer'>
-            <button className={"bigButton"} onClick={pick}>{(picked === -1 ? "Pick Up" : (picked == stack.id ? "Release" : "Drop"))} </button>
-            <div className='stack'>
+            {/* <button className={"bigButton"} >{(picked === -1 ? "Pick Up" : (picked == stack.id ? "Release" : "Drop"))} </button> */}
+            <div className='stack' onClick={e => { console.log("You clicked a stack!"); pick(stack); }}>
                 <hr></hr>
                 {stack.balls.map((ball) => {
-                    return (<Ball key={ball} ball={ball} />);
+                    return (<Ball key={ball} ball={ball} pick={pick} />);
                 })}
             </div>
         </div>
     );
 }
 
-function Ball({ ball }) {
+function Ball({ ball, pick }) {
     return (
-        <button onClick={e => console.log("We Clicked a " + ball + " ball!")} className={'ball ' + ball}>{}</button>
+        <button onClick={e => console.log("You clicked the ball")} className={'ball ' + ball} > { }</button >
     );
 }
 
 
-/* Notes
+/* Notes Vol. 1
 (1) This is starting to make sense, But i wanna keep track of each state.
 (2) We want to have a state that keeps track of the location for each thing?
     or do we keep track of every element? I'm not quite sure. Hmm Well that is confusing.
@@ -163,8 +166,15 @@ So like how do we do that.
 (23) Somehow we'd need to keep track of the number
 (24) Wait I feel like what were doing isn't too  bad. I don't see that many steps inbetween what were trying to do.
 (25) Okay slay we now are able to identify that specific element. Which is cool. So now we need to do another thing where we sent it to another one. Which maybe it would be better to do that another way.
-*/
 
+*/
+/* Notes Vol. 2
+(1) Yay we actually made them balls, which is cool to see. Now we need to get rid of the thing where we click pick up, so that we can click on the balls, which will then result in us picking up all the balls above it that are the same color. Otherwise it wont do anything.
+(2) I think things need to be reorganized, also why does it work that way? It Really shouldn't but oh well. In order
+    to successfully change the way we pick up balls; Then we need to completely change the parameters for pick. So that it will send the ball, but honestly, I don't know how well drop it in an empty stack. Which makes things kinda hard. Yikes!
+    Maybe there's a way to have a button over an empty stack that says something like "Drop Here!". Then i guess it would make sense, but honestly Idk.
+(3) Maybe just have a onClick for the stack, but the problem is that, it takes the balls. But honestly If we do stack, then it could be way easier.
+*/
 //Hmm we display based on that state.
 
 

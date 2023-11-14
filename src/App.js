@@ -1,52 +1,5 @@
 import { useState } from 'react';
 
-// const balls = ["green", "blue", "red"];
-
-/*
-
-function Ball({ ball }) {
-    return <button>{ball}</button>
-}
-
-
-function Stack({ balls }) {
-
-    return (
-        <div className='stack'>
-            {balls.map((ball, index) => {
-                return (<Ball key={index} ball={ball} />);
-            })}
-        </div>
-    )
-}
-
-
-function AddColor({ color, balls, setBalls }) {
-    return <button onClick={e => setBalls([...balls, color])}>Add {color}</button>
-}
-export default function App() {
-    const [balls, setBalls] = useState(["green", "blue", "red"]);
-
-    return (
-        <div>
-            <h1>Cayden Huffman</h1>
-            <AddColor color={"purple"} balls={balls} setBalls={setBalls} />
-            <AddColor color={"pink"} balls={balls} setBalls={setBalls} />
-            <div className='group'>
-                <Stack balls={balls} setBalls={setBalls} />
-            </div>
-        </div>
-    )
-}
-
-
-
-function printy(name) {
-    console.log("Printing a " + name + " ball!");
-}
-
-*/
-
 export default function App() {
     return (<div>
         <h1>Cayden's Thing</h1>
@@ -54,12 +7,38 @@ export default function App() {
     </div>);
 }
 
-//then we want to display all the maps. 
 
 function Group() {
-    const [picked, setPicked] = useState(-1);
-    const [stacks, setStacks] = useState([{ id: 0, balls: [] }, { id: 1, balls: ["red1", "green1", "blue1", "green2"] }, { id: 2, balls: ["red2", "blue2", "blue3", "green3"] }, { id: 3, balls: ["green4", "red3", "blue4", "red4"] }, { id: 4, balls: [] }]);
-    //Note We need to make sure the one were picking up isn't empty. 
+    // const [picked, setPicked] = useState(-1);
+    //Hmm we might have to set the id to just the number. Because that makes it really hard to tell the index. 
+    const [stacks, setStacks] = useState([
+        { id: 0, balls: [] },
+        {
+            id: 1, balls: [
+                { id: "green3", color: "green", picked: 0 },
+                { id: "green2", color: "green", picked: 0 },
+                { id: "green1", color: "green", picked: 0 },
+                { id: "blue1", color: "blue", picked: 0 },
+            ]
+        },
+        {
+            id: 2, balls: [
+                { id: "red1", color: "red", picked: 0, },
+                { id: "red2", color: "red", picked: 0 },
+                { id: "blue2", color: "blue", picked: 0 },
+                { id: "blue3", color: "blue", picked: 0 },
+            ]
+        },
+        {
+            id: 3, balls: [
+                { id: "green4", color: "green", picked: 0 },
+                { id: "red3", color: "red", picked: 0 },
+                { id: "blue4", color: "blue", picked: 0 },
+                { id: "red4", color: "red", picked: 0 }]
+        },
+        { id: 4, balls: [] }]);
+
+    /*
     function pick(stack) {
         if (picked != -1) {
             if (stack.id == picked) {
@@ -86,24 +65,60 @@ function Group() {
         }
 
     }
+*/
 
+    function clickBall(stack, ball) {
+        if (ball !== false) {
+            console.log("You clicked " + ball.id + " in stack" + stack.id + "!");
+            //Now we set that ball as being selected. 
+            const tempArray = [...stacks];
+            const indexOfBall = tempArray[stack.id].balls.indexOf(ball);
+            if (tempArray[stack.id].balls[indexOfBall].picked == 0) {
+                let aboveSameBool = true;
+                for (let i = indexOfBall; i > 0; i--) {
+                    if (tempArray[stack.id].balls[i].color == tempArray[stack.id].balls[i - 1].color) {
+                        aboveSameBool = true;
+                    } else {
+                        aboveSameBool = false;
+                        i = 0; 
+                    }
+                }
+                console.log(aboveSameBool)
+                // if (aboveSameBool) {
+                //     for (let i = indexOfBall; i >= 0; i--) {
 
+                //         tempArray[stack.id].balls[i].picked = 1;
+                //     }
+                // }
+            } else {
+                // tempArray[stack.id].balls[indexOfBall].picked = 0;
+                for (let i = 3; i > indexOfBall; i--) {
+                    tempArray[stack.id].balls[i].picked = 0;
+                }
+            }
+            setStacks(tempArray);
+
+        }
+        else if (stack.balls.length == 0) {
+            console.log("You clicked the stack" + stack.id);
+            // console.log(stacks);
+        }
+
+    }
 
     //lets put yellow on the top. 
     function AddBall(stackId, ball) {
         let tempArray = stacks.slice();
-        // tempArray[stack.id - 1]
         tempArray[stackId].balls.unshift(ball);
         setStacks(tempArray);
     }
-
 
     return (
         <div>
             <button onClick={e => AddBall(2, "yellow")}>Add Ball</button>
             <div className='group'>
                 {stacks.map((stack) => {
-                    return (<Stack key={stack.id} stack={stack} setStacks={setStacks} picked={picked} pick={e => pick(stack)} />);
+                    return (<Stack key={stack.id} stack={stack} clickBall={(ball) => clickBall(stack, ball)} />);
                 })}
             </div>
         </div>
@@ -111,25 +126,31 @@ function Group() {
 
 }
 
-function Stack({ stack, setStacks, picked, pick }) {
-    //Note there, should be an easier way to do that lol
+function Stack({ stack, clickBall }) {
+
+    // function clickBall(ballName) {
+    //     const stack = clickStack();
+    //     // console.log(ballName);
+    //     const tempArray = []
+    //     setStacks()
+
+    // }
 
     return (
         <div className='stackContainer'>
-            {/* <button className={"bigButton"} >{(picked === -1 ? "Pick Up" : (picked == stack.id ? "Release" : "Drop"))} </button> */}
-            <div className='stack' onClick={e => { console.log("You clicked a stack!"); pick(stack); }}>
+            <div className='stack' onClick={e => clickBall(false)}>
                 <hr></hr>
                 {stack.balls.map((ball) => {
-                    return (<Ball key={ball} ball={ball} pick={pick} />);
+                    return (<Ball ball={ball} key={ball.id} clickBall={e => clickBall(ball)} />);
                 })}
             </div>
         </div>
     );
 }
 
-function Ball({ ball, pick }) {
+function Ball({ ball, clickBall }) {
     return (
-        <button onClick={e => console.log("You clicked the ball")} className={'ball ' + ball} > { }</button >
+        <button className={'ball ' + ball.color + (ball.picked === 1 ? " selected" : "")} onClick={clickBall}></button >
     );
 }
 
@@ -174,6 +195,34 @@ So like how do we do that.
     to successfully change the way we pick up balls; Then we need to completely change the parameters for pick. So that it will send the ball, but honestly, I don't know how well drop it in an empty stack. Which makes things kinda hard. Yikes!
     Maybe there's a way to have a button over an empty stack that says something like "Drop Here!". Then i guess it would make sense, but honestly Idk.
 (3) Maybe just have a onClick for the stack, but the problem is that, it takes the balls. But honestly If we do stack, then it could be way easier.
+*/
+
+
+/* Notes Vol. 3
+(1) we should make it where you click the ball and then it goes and hangs out above the stack. Almost like the bigButton thing that we had before,
+    but also how do we handle when there are more than one ball? i'm not sure to be honest. Maybe, we add a spot to lift all the balls up. Like if you were lifting the thing up.
+(2) Maybe it's time to make it where we store the state of the balls differently, so we have a name for each item and then we also have a color for it. That way we can compare
+    two balls to see if they are the same color.
+(3) To implement selecting multiple balls, we can make it where if we click on the bottom one, it checks to see if the ball above it is the same color,
+    if it is not the same color, then don't do anything. If it is the same color, check to see if the ball above it is the same color. If it is then check again. If it is not stop. But we also need to repeat this from the index of the ball we click
+    all the way to the top of the array.
+(4) First let us just reorganize everything so we can carry more than one thing.
+(5) We're Gonna build a static version first using the new ideas.
+(6) Now we have to make it where when we click on a ball it can change the state of the stacks.
+(7) Wait what are we doing now? Like what step is next? Do we implement a way to pick them up. Hmm How Do we do this? Maybe I think we select a ball
+    And then we print out all the balls above it. As if we were groupign them together. Should we find a way to make them
+    a div element unique? Or maybe we could change their borders as a symbol of being selected.
+(8) And how do we move forward? I think when we click a ball we add that it has been selected.
+(9) Okay that looks pretty good, how do we now do this from here?
+(10) Okay i think first, it would be good to select all index above.
+(11) So Far it's looking really good. It mostly, workign the way that I would expect. The only thing is that we'd sometimes want to make sure
+     its not the top one.
+(12) Now what are we looking to do? What is the next step? I think we are going to try and do something with only picking them if the above is the same color.
+     Also just a note, we could definitly keep track of the ones that are picked using the picked state, instead of having it for that. Which i guess it could store the
+     The stack id and also the ball ids. Which I guess makes sense and stuff. But how would we then identify if a specific ball is part of that one.
+(13) I don't really like how the picked is stored in the thing. Maybe its not good that I'm practically storing it twice to do that. But oh well. 
+(14) I think maybe it would be a good idea to make it where when you click on the stack that it takes all t
+
 */
 //Hmm we display based on that state.
 

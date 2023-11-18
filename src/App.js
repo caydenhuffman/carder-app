@@ -12,7 +12,7 @@ function Group() {
 
     const ballCount = 5;
     const [selected, setSelected] = useState(-1);
-    const [stacks, setStacks] = useState([]);
+    const [stacks, setStacks] = useState([[]]);
 
     function stackClick(stack, stackId) {
 
@@ -23,9 +23,9 @@ function Group() {
             setSelected(-1);
         } else {
             console.log("We will be moving stack" + selected + " to stack" + stackId + "!");
-            const stacksCopy = [...stacks];
-            const fromStack = [...stacks[selected]];
-            const toStack = [...stacks[stackId]];
+            const stacksCopy = [...stacks[0]];
+            const fromStack = [...stacks[0][selected]];
+            const toStack = [...stacks[0][stackId]];
 
             if (fromStack.length > 0 && toStack.length < ballCount) {
 
@@ -55,7 +55,7 @@ function Group() {
             // console.log(stacksCopy);
             // console.log("Stacks: ")
             // console.log(stacks);
-            setStacks(stacksCopy);
+            setStacks([stacksCopy, ...stacks]);
             setSelected(-1);
         }
 
@@ -99,15 +99,24 @@ function Group() {
         stacksRand.push([], []);
         console.log(stacksRand)
 
-        setStacks(stacksRand)
+        setStacks([stacksRand])
     }
 
+    function undo() {
+        if (stacks.length > 1) {
+            let tempStack = [...stacks];
+            tempStack.shift();
+            setStacks(tempStack);
+        }
+
+    }
     return (
         <div>
             <button onClick={e => randomize(['green', 'red', 'yellow', 'blue', 'debut', 'fearless', 'speaknow', 'Red', 'l989', 'reputation', 'lover', 'folklore', 'evermore', 'midnights'])}>Randomize</button>
-            <button onClick={e => setStacks([...stacks, []])}>Add Stack </button>
+            <button onClick={e => setStacks([...stacks[0], []])}>Add Stack </button>
+            <button onClick={e => undo()}>Undo</button>
             <div className='group'>
-                {stacks.map((stack, index) => {
+                {stacks[0].map((stack, index) => {
                     return (<Stack key={index} stack={{ id: index, balls: stack }} selected={selected} stackClick={e => stackClick(stack, index)} />);
                 })}
             </div>

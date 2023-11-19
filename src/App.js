@@ -10,6 +10,10 @@ export default function App() {
 
 function Group() {
 
+    // const colors = ['green', 'red', 'yellow', 'blue', 'debut', 'fearless', 'speaknow', 'Red', 'l989', 'reputation', 'lover', 'folklore', 'evermore', 'midnights'];
+    // const colors = ['dimgray', 'seagreen', 'midnightblue', 'darkred', 'olive', 'orangered', 'orange', 'lime', 'mediumorchid', 'aqua', 'blue', 'lightcoral', 'fuchsia', 'dodgerblue', 'laserlemon', 'plum', 'deeppink', 'palegreen', 'lightskyblue', 'peachpuff'];
+    const colors = ['dimgray', 'seagreen', 'midnightblue', 'darkred', 'olive', 'orangered', 'orange', 'lime', 'plum', 'aqua', 'blue', 'lightcoral', 'black', 'teal', 'laserlemon', 'darkpurple', 'deeppink', 'palegreen', 'lightskyblue', 'peachpuff'];
+
     const ballCount = 5;
     const [selected, setSelected] = useState(-1);
     const [stacks, setStacks] = useState([[]]);
@@ -97,6 +101,9 @@ function Group() {
             stacksRand.push(bigArray.slice(i, i + ballCount));
         }
         stacksRand.push([], []);
+        if (ballCount > 4) {
+            stacksRand.push([]);
+        }
         console.log(stacksRand)
 
         setStacks([stacksRand])
@@ -108,13 +115,12 @@ function Group() {
             tempStack.shift();
             setStacks(tempStack);
         }
-
     }
     return (
         <div>
-            <button onClick={e => randomize(['green', 'red', 'yellow', 'blue', 'debut', 'fearless', 'speaknow', 'Red', 'l989', 'reputation', 'lover', 'folklore', 'evermore', 'midnights'])}>Randomize</button>
-            <button onClick={e => setStacks([...stacks[0], []])}>Add Stack </button>
-            <button onClick={e => undo()}>Undo</button>
+            <button className={"menuButton"} onClick={e => randomize(colors)}>Randomize</button>
+            <button className={"menuButton"} onClick={e => setStacks([[...stacks[0], []], stacks])}>Add Stack </button>
+            <button className={"menuButton"} onClick={e => undo()}>Undo</button>
             <div className='group'>
                 {stacks[0].map((stack, index) => {
                     return (<Stack key={index} stack={{ id: index, balls: stack }} selected={selected} stackClick={e => stackClick(stack, index)} />);
@@ -130,8 +136,8 @@ function Stack({ stack, stackClick, selected }) {
 
 
     return (
-        <div className={'stackContainer ' + ((selected == stack.id) ? 'stackSelected' : '')}>
-            <div className='stack' onClick={stackClick}>
+        <div className={'stackContainer ' + ((selected == stack.id) ? 'stackSelected' : '')} onClick={stackClick}>
+            <div className='stack' >
                 <hr></hr>
                 {stack.balls.map((ball) => {
                     return (<Ball key={ball.id} ball={ball} />);

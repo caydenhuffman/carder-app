@@ -2,6 +2,12 @@
     font-family: 'IM Fell English';
 }
 
+.menuButton {
+    padding: 6px;
+    margin-right: 25px;
+    width: 120px; 
+}
+
 .stack {
     display: flex;
     flex-direction: column;
@@ -21,10 +27,10 @@
     width: 100px;
     display: flex;
     flex-direction: column;
-    /* padding: 4px; */
     padding-top: 100px;
     justify-content: end;
-    /* border: blue 1px solid;  */
+    align-items: center;
+
 
 }
 
@@ -53,7 +59,7 @@
     /* justify-content:space-between; */
     padding: 2px;
     /* align-content:space-evenly; */
-    flex-wrap:wrap;
+    flex-wrap: wrap;
 }
 
 
@@ -63,64 +69,6 @@
     /* background-color: mediumpurple; */
 }
 
-
-.debut {
-    background-color: #b1f4a3;
-}
-
-.fearless {
-    background-color: #efc88c;
-}
-
-.speaknow {
-    background-color: #824983;
-}
-
-.red {
-    background-color: red;
-}
-
-.l989 {
-    background-color: #83d9ff;
-}
-
-.reputation,
-.black {
-    background-color: black;
-}
-
-.lover {
-    background-color: #ec84ae;
-}
-
-.folklore {
-    background-color: #b7b7b7;
-}
-
-.evermore {
-    background-color: #9e4b2d;
-}
-
-.midnights {
-    background-color: #375a97;
-}
-
-
-.blue {
-    background-color: rgb(0, 123, 255);
-}
-
-.green {
-    background-color: rgb(74, 244, 74);
-}
-
-.yellow {
-    background-color: yellow;
-}
-
-.Red {
-    background-color: #bf3543;
-}
 
 
 /* latin */

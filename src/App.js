@@ -2,7 +2,7 @@ import { useState } from 'react';
 
 export default function App() {
     return (<div>
-        <h1>Cayden's Thing</h1>
+        <h1 className='title'>Cayden's Ball Sorter</h1>
         <Group />
     </div>);
 }
@@ -150,7 +150,7 @@ function Stack({ stack, stackClick, selected }) {
 function Ball({ ball }) {
 
     return (
-        <button className={'ball ' + ball.color}></button >
+        <div className={'ball ' + ball.color}></div >
     );
 }
 

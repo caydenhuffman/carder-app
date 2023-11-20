@@ -2,11 +2,27 @@
     font-family: 'IM Fell English';
 }
 
+
 .menuButton {
     padding: 6px;
     margin-right: 25px;
     width: 120px; 
+    background-color: indigo;
+    color:white; 
+    border: black 1px outset; 
 }
+.title {
+    color: indigo; 
+}
+
+/* .menuButton:hover {
+    background-color: rgb(94, 49, 126);
+} */
+.menuButton:active {
+    background-color: rgb(149, 0, 255);
+}
+
+
 
 .stack {
     display: flex;
@@ -24,7 +40,7 @@
 }
 
 .stackContainer {
-    width: 100px;
+    width: 90px;
     display: flex;
     flex-direction: column;
     padding-top: 100px;

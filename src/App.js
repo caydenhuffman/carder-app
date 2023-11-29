@@ -1,5 +1,8 @@
 import { useState } from 'react';
 
+
+let ballCount = 5;
+
 export default function App() {
     return (<div>
         <h1 className='title'>Cayden's Ball Sorter</h1>
@@ -14,13 +17,11 @@ function Group() {
     // const colors = ['dimgray', 'seagreen', 'midnightblue', 'darkred', 'olive', 'orangered', 'orange', 'lime', 'mediumorchid', 'aqua', 'blue', 'lightcoral', 'fuchsia', 'dodgerblue', 'laserlemon', 'plum', 'deeppink', 'palegreen', 'lightskyblue', 'peachpuff'];
     const colors = ['dimgray', 'seagreen', 'midnightblue', 'darkred', 'olive', 'orangered', 'orange', 'lime', 'plum', 'aqua', 'blue', 'lightcoral', 'black', 'teal', 'laserlemon', 'darkpurple', 'deeppink', 'palegreen', 'lightskyblue', 'peachpuff'];
 
-    const ballCount = 5;
+
     const [selected, setSelected] = useState(-1);
     const [stacks, setStacks] = useState([[]]);
 
     function stackClick(stack, stackId) {
-
-        // console.log(stackId);
         if (selected == -1) {
             setSelected(stackId)
         } else if (selected == stackId) {
@@ -47,18 +48,9 @@ function Group() {
                 }
             }
 
-
-
-
-
-            //Update the stacksCopy: 
             stacksCopy[selected] = fromStack;
             stacksCopy[stackId] = toStack;
 
-            // console.log("StacksCopy: ");
-            // console.log(stacksCopy);
-            // console.log("Stacks: ")
-            // console.log(stacks);
             setStacks([stacksCopy, ...stacks]);
             setSelected(-1);
         }
@@ -101,12 +93,19 @@ function Group() {
             stacksRand.push(bigArray.slice(i, i + ballCount));
         }
         stacksRand.push([], []);
-        if (ballCount > 4) {
+        if (ballCount === 5) {
+            stacksRand.push([]);
+        } else if (ballCount === 6) {
             stacksRand.push([]);
         }
-        console.log(stacksRand)
+        setSelected(-1);
 
         setStacks([stacksRand])
+    }
+
+    function randomizeSize(size) {
+        ballCount = size;
+        setStacks([[]]);
     }
 
     function undo() {
@@ -118,9 +117,14 @@ function Group() {
     }
     return (
         <div>
-            <button className={"menuButton"} onClick={e => randomize(colors)}>Randomize</button>
+            <button className={"menuButton"} onClick={e => randomize(colors)}>Start Game</button>
             <button className={"menuButton"} onClick={e => setStacks([[...stacks[0], []], stacks])}>Add Stack </button>
             <button className={"menuButton"} onClick={e => undo()}>Undo</button>
+            <p>Set Ball Height To:  </p>
+            <button className='numberButton' onClick={e => randomizeSize(4)}> 4</button>
+            <button className='numberButton' onClick={e => randomizeSize(5)}> 5</button>
+            <button className='numberButton' onClick={e => randomizeSize(6)}> 6</button>
+
             <div className='group'>
                 {stacks[0].map((stack, index) => {
                     return (<Stack key={index} stack={{ id: index, balls: stack }} selected={selected} stackClick={e => stackClick(stack, index)} />);
@@ -137,7 +141,7 @@ function Stack({ stack, stackClick, selected }) {
 
     return (
         <div className={'stackContainer ' + ((selected == stack.id) ? 'stackSelected' : '')} onClick={stackClick}>
-            <div className='stack' >
+            <div className={'stack' + ' stack' + ballCount} >
                 <hr></hr>
                 {stack.balls.map((ball) => {
                     return (<Ball key={ball.id} ball={ball} />);

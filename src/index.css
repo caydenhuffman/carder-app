@@ -6,19 +6,39 @@
 .menuButton {
     padding: 6px;
     margin-right: 25px;
-    width: 120px; 
+    width: 120px;
     background-color: indigo;
-    color:white; 
-    border: black 1px outset; 
+    color: white;
+    border: black 1px outset;
 }
+
+.numberButton{
+    padding: 6px;
+    margin-right: 15px;
+    width: 20px;
+    background-color: indigo;
+    color: white;
+    border: black 1px outset;
+}
+
+p {
+    display: inline-block;
+    /* text-align: left; */
+    margin: 0px;
+    padding-right: 10px; 
+    padding-left: 40px; 
+}
+
+
 .title {
-    color: indigo; 
+    color: indigo;
+    margin: 10px
 }
 
 /* .menuButton:hover {
     background-color: rgb(94, 49, 126);
 } */
-.menuButton:active {
+.menuButton:active, .numberButton:active {
     background-color: rgb(149, 0, 255);
 }
 
@@ -30,13 +50,25 @@
     /* height: 100%; */
     /* height: 120px; */
 
-    min-height: 150px;
+    /* min-height: 150px; */
     justify-content: end;
     width: 30px;
     align-items: center;
     border-bottom: 1px black solid;
     border-left: 1px black solid;
     border-right: 1px black solid;
+}
+
+.stack5 {
+    min-height: 150px;
+}
+
+.stack6 {
+    min-height: 175px;
+}
+
+.stack4 {
+    min-height: 125px;
 }
 
 .stackContainer {

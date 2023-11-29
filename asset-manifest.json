@@ -1,13 +1,13 @@
 {
   "files": {
     "main.css": "/carder-app/static/css/main.483d0ace.css",
-    "main.js": "/carder-app/static/js/main.2d458ad6.js",
+    "main.js": "/carder-app/static/js/main.ebbf3386.js",
     "index.html": "/carder-app/index.html",
     "main.483d0ace.css.map": "/carder-app/static/css/main.483d0ace.css.map",
-    "main.2d458ad6.js.map": "/carder-app/static/js/main.2d458ad6.js.map"
+    "main.ebbf3386.js.map": "/carder-app/static/js/main.ebbf3386.js.map"
   },
   "entrypoints": [
     "static/css/main.483d0ace.css",
-    "static/js/main.2d458ad6.js"
+    "static/js/main.ebbf3386.js"
   ]
 }

@@ -110,6 +110,8 @@ function Group() {
   const [selected, setSelected] = useState(-1);
   const [currentStacks, setCurrentStacks] = useState([]);
   const [history, setHistory] = useState([]);
+  const [lastMove, setLastMove] = useState(null);
+  const [boardAnimationKey, setBoardAnimationKey] = useState(0);
 
   const hasGame = currentStacks.length > 0;
   const solved = hasGame && isBoardSolved(currentStacks, ballCount);
@@ -119,12 +121,15 @@ function Group() {
     setSelected(-1);
     setCurrentStacks([]);
     setHistory([]);
+    setLastMove(null);
   }
 
   function startGame() {
     setSelected(-1);
     setHistory([]);
+    setLastMove(null);
     setCurrentStacks(createRandomBoard(COLORS, ballCount));
+    setBoardAnimationKey((currentKey) => currentKey + 1);
   }
 
   function pushHistory(nextStacks) {
@@ -135,6 +140,11 @@ function Group() {
   function addStack() {
     const nextStacks = [...cloneStacks(currentStacks), []];
     setSelected(-1);
+    setLastMove({
+      stackId: nextStacks.length - 1,
+      ballIds: [],
+      key: Date.now(),
+    });
     pushHistory(nextStacks);
   }
 
@@ -145,6 +155,7 @@ function Group() {
 
     const [previousBoard, ...rest] = history;
     setSelected(-1);
+    setLastMove(null);
     setCurrentStacks(previousBoard);
     setHistory(rest);
   }
@@ -190,10 +201,17 @@ function Group() {
       toStack.unshift(fromStack.shift());
     }
 
+    const movedBallIds = toStack.map((ball) => ball.id).slice(0, toStack.length - nextStacks[stackId].length);
+
     nextStacks[selected] = fromStack;
     nextStacks[stackId] = toStack;
 
     setSelected(-1);
+    setLastMove({
+      stackId,
+      ballIds: movedBallIds,
+      key: Date.now(),
+    });
     pushHistory(nextStacks);
   }
 
@@ -235,7 +253,7 @@ function Group() {
       </div>
 
       {solved ? (
-        <div className="statusBar">
+        <div className="statusBar statusBarWin">
           <p className="statusText">
             Board solved. Time to admire it and scramble another one.
           </p>
@@ -245,7 +263,7 @@ function Group() {
         </div>
       ) : null}
 
-      <div className="group">
+      <div key={boardAnimationKey} className="group boardAnimated">
         {currentStacks.map((stack, index) => (
           <Stack
             key={`stack-${index}`}
@@ -253,6 +271,10 @@ function Group() {
             selected={selected}
             stackClick={() => stackClick(index)}
             ballCount={ballCount}
+            animationIndex={index}
+            movedHere={lastMove?.stackId === index}
+            movedBallIds={lastMove?.stackId === index ? lastMove.ballIds : []}
+            moveAnimationKey={lastMove?.key}
           />
         ))}
       </div>
@@ -260,29 +282,43 @@ function Group() {
   );
 }
 
-function Stack({ stack, stackClick, selected, ballCount }) {
+function Stack({
+  stack,
+  stackClick,
+  selected,
+  ballCount,
+  animationIndex,
+  movedHere,
+  movedBallIds,
+  moveAnimationKey,
+}) {
   return (
     <button
       type="button"
       className={`stackContainer stackContainer${ballCount} ${
         selected === stack.id ? "stackSelected" : ""
-      }`}
+      } ${movedHere ? "stackJustMoved" : ""}`}
+      style={{ animationDelay: `${animationIndex * 28}ms` }}
       onClick={stackClick}
     >
       <span className={`stackGlow stackGlow${ballCount}`} />
       <div className={`stack stack${ballCount}`}>
         <div className="stackLip" />
         {stack.balls.map((ball) => (
-          <Ball key={ball.id} ball={ball} />
+          <Ball
+            key={`${ball.id}-${moveAnimationKey ?? "idle"}`}
+            ball={ball}
+            justMoved={movedBallIds.includes(ball.id)}
+          />
         ))}
       </div>
     </button>
   );
 }
 
-function Ball({ ball }) {
+function Ball({ ball, justMoved }) {
   return (
-    <div className={`ball ${ball.color}`}>
+    <div className={`ball ${ball.color} ${justMoved ? "ballJustMoved" : ""}`}>
       <span className="ballHighlight" />
     </div>
   );

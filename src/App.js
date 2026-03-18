@@ -21,10 +21,11 @@ const COLORS = [
   "palegreen",
   "lightskyblue",
   "peachpuff",
+  "red"
 ];
 
 const EXTRA_STACKS_BY_HEIGHT = {
-  4: 2,
+  4: 3,
   5: 3,
   6: 3,
 };
@@ -107,16 +108,16 @@ export default function App() {
 function Group() {
   const [ballCount, setBallCount] = useState(5);
   const [selected, setSelected] = useState(-1);
-  const [currentStacks, setCurrentStacks] = useState([[]]);
+  const [currentStacks, setCurrentStacks] = useState([]);
   const [history, setHistory] = useState([]);
 
-  const hasGame = currentStacks.some((stack) => stack.length > 0);
+  const hasGame = currentStacks.length > 0;
   const solved = hasGame && isBoardSolved(currentStacks, ballCount);
 
   function resetBoard(size) {
     setBallCount(size);
     setSelected(-1);
-    setCurrentStacks([[]]);
+    setCurrentStacks([]);
     setHistory([]);
   }
 
@@ -203,7 +204,11 @@ function Group() {
           <button className="menuButton primaryButton" onClick={startGame}>
             Start Game
           </button>
-          <button className="menuButton secondaryButton" onClick={addStack}>
+          <button
+            className="menuButton secondaryButton"
+            onClick={addStack}
+            disabled={!hasGame}
+          >
             Add Stack
           </button>
           <button
@@ -229,18 +234,16 @@ function Group() {
         </div>
       </div>
 
-      <div className="statusBar">
-        <p className="statusText">
-          {solved
-            ? "Board solved. Time to admire it and scramble another one."
-            : hasGame
-              ? "Tap one stack, then another, to move matching balls."
-              : "Press Start Game to generate a fresh puzzle."}
-        </p>
-        <p className="statusMeta">
-          {history.length} undo{history.length === 1 ? "" : "s"} available
-        </p>
-      </div>
+      {solved ? (
+        <div className="statusBar">
+          <p className="statusText">
+            Board solved. Time to admire it and scramble another one.
+          </p>
+          <p className="statusMeta">
+            {history.length} undo{history.length === 1 ? "" : "s"} available
+          </p>
+        </div>
+      ) : null}
 
       <div className="group">
         {currentStacks.map((stack, index) => (
@@ -261,10 +264,12 @@ function Stack({ stack, stackClick, selected, ballCount }) {
   return (
     <button
       type="button"
-      className={`stackContainer ${selected === stack.id ? "stackSelected" : ""}`}
+      className={`stackContainer stackContainer${ballCount} ${
+        selected === stack.id ? "stackSelected" : ""
+      }`}
       onClick={stackClick}
     >
-      <span className="stackGlow" />
+      <span className={`stackGlow stackGlow${ballCount}`} />
       <div className={`stack stack${ballCount}`}>
         <div className="stackLip" />
         {stack.balls.map((ball) => (
